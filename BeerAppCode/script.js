@@ -25,28 +25,19 @@ function handleAgeVerifyYes(){
  
  function generateSearchHTML(){
   return ` <div class="container">
+   <form id="js-form">
    <h1>Find your beer</h1>
- 
-     <form id="js-form">
         <select id="beer-options">
         </select>
-        <input type="checkbox" id ='toggle-ABV' name='toggle-ABV'>
-        <label for='toggle-ABV'>Turn on ABV</label>
-        <label for="ABV">ABV</label>
-        <input type="range" name="ABV" min="1" max="10" value="7" class="slider" id="ABV-slider">
-       <input type="checkbox" id ='toggle-IBU' name='toggle-IBU'>
-        <label for='toggle-IBU'>Turn on IBU</label>
-        <label for="IBU">IBU</label>
-         <input type="range" name="IBU" min="1" max="100" value="50" class="slider" id="IBU-slider">
          <input type="submit" class="submit-button" value="Cheers!">
      </form>`
 }
  
- 
+ //extra Key=40aeb398c0b04b9c9774388e99c14b22
  const apiKey='ea7ce7f27274c0049b58389ab2dfc959'
  const searchUrl='https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/beers/?';
  const stylesURL = 'https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/styles/?key='+apiKey;
- 
+ //const breweryURL = `https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/beer/${beerID}/breweries/?key=ea7ce7f27274c0049b58389ab2dfc959`
  function formatQueryParameters(params){
      const queryItems = Object.keys(params)
          .map(key => `${key}=${params[key]}`)
@@ -58,6 +49,7 @@ function displayResults(responseJson){
    for(let i = 0; i < responseJson.data.length; i++){
      $('#results-list').append(
        `<li><h3>${responseJson.data[i].name}</h3>
+       <button type='button' value='${responseJson.data[i].id}' class='find-brewery'>Find Brewery</button>
        <p>ABV: ${responseJson.data[i].abv}</p>
        <p>IBU: ${responseJson.data[i].ibu}</p>
        <p>${responseJson.data[i].description}</p>`
@@ -65,8 +57,10 @@ function displayResults(responseJson){
    }
 }
 
+
+
  
-function getBeerList(styleId,abv, ibu, ){
+function getBeerList(styleId){
    const params = {
      key: apiKey,
      styleId: styleId,
@@ -98,6 +92,18 @@ function getBeerList(styleId,abv, ibu, ){
  
 }
 
+function getBrewery(){
+  $('#results').on('click', '.find-brewery', function(){
+    const beerID = $(this).val();
+    const breweryURL = `https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/beer/${beerID}/breweries/?key=ea7ce7f27274c0049b58389ab2dfc959`
+  
+  fetch(breweryURL)
+  .then(res => res.json())
+  .then(data => console.log(data))
+  })
+
+}
+
 function getStylesList() {
 fetch(stylesURL)  
   .then(res => res.json())
@@ -109,24 +115,25 @@ fetch(stylesURL)
   .catch(err => console.log(err))
 }
 
+/*
 function getSliderData(form, type) {
   const range = $(form).find(`#${type}-slider`).val();
   console.log(range);
   return range;
 }
-
+*/
 
 function watchForm(){
 $('form').on('submit', function(event){
   event.preventDefault();
   const styleId = $('select').find(':selected').attr('id')
   //const maxResults = $('#js-Max-results').val();
-  const ABV = getSliderData(this, 'ABV') || 0;
-  const IBU = getSliderData(this, 'IBU') || 0;
-  const toggleABV= $('#toggle-ABV').is(':checked')
-  const toggleIBU=$('#toggle-IBU').is(':checked')
-  console.log(toggleABV, toggleIBU, ABV, IBU)
-  getBeerList(styleId,ABV,IBU);
+  //const ABV = getSliderData(this, 'ABV') || 0;
+  //const IBU = getSliderData(this, 'IBU') || 0;
+  //const toggleABV= $('#toggle-ABV').is(':checked')
+  //const toggleIBU=$('#toggle-IBU').is(':checked')
+  //console.log(toggleABV, toggleIBU, ABV, IBU)
+  getBeerList(styleId);
   renderResultsHTML();
 })
 }
@@ -150,6 +157,7 @@ function generateResultsHTML(){
 
 function renderResultsHTML(){
 $('.landing-page').html(generateResultsHTML());
+getBrewery();
 returnToSearch();
 }
 
