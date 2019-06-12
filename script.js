@@ -26,7 +26,7 @@ function handleAgeVerifyYes(){
  function generateSearchHTML(){
   return ` <div class="container">
    <form id="js-form">
-   <h1>Find your beer</h1>
+   <h1 class='form-title'>Find your beer</h1>
         <select id="beer-options">
         </select>
          <input type="submit" class="submit-button" value="Cheers!">
@@ -38,7 +38,8 @@ function handleAgeVerifyYes(){
  const searchUrl='https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/beers/?';
  const stylesURL = 'https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/styles/?key='+apiKey;
  //const breweryURL = `https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/beer/${beerID}/breweries/?key=ea7ce7f27274c0049b58389ab2dfc959`
- function formatQueryParameters(params){
+
+function formatQueryParameters(params){
      const queryItems = Object.keys(params)
          .map(key => `${key}=${params[key]}`)
          return queryItems.join('&')
@@ -92,16 +93,37 @@ function getBeerList(styleId){
  
 }
 
+
+function displayBreweryInfo(responseJson){
+  $('#brewery-info').empty()
+  for(let i = 0; i < responseJson.data.length; i++){
+    $('#brewery-info').append(
+      `<li><h3>${responseJson.data[i].name}</h3>
+      <p>Still in business:${responseJson.data[i].isInBusiness}</p></li>`
+    )
+  }
+}
+
+function handleModalClose(){
+  $('#modal').on('click','#close', function(e){
+    $('#modal').css('display','none');
+  })
+}
+
 function getBrewery(){
   $('#results').on('click', '.find-brewery', function(){
     const beerID = $(this).val();
     const breweryURL = `https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/beer/${beerID}/breweries/?key=ea7ce7f27274c0049b58389ab2dfc959`
+    $('#modal').css('display', 'block')
   
-  fetch(breweryURL)
+    fetch(breweryURL)
   .then(res => res.json())
-  .then(data => console.log(data))
+  .then(data => {
+    console.log(data)
+    displayBreweryInfo(data)
   })
-
+  handleModalClose()
+})
 }
 
 function getStylesList() {
@@ -122,6 +144,7 @@ function getSliderData(form, type) {
   return range;
 }
 */
+
 
 function watchForm(){
 $('form').on('submit', function(event){
@@ -147,8 +170,17 @@ $('.landing-page').html(generateSearchHTML());
  
 function generateResultsHTML(){
  return `<p id="js-error-message" class="error-message"></p>
+ <h2 class='search-results'>Search results</h2>
  <section id="results" class="hidden">
-   <h2>Search results</h2>
+   <div id="modal" class="modal">
+  <div class="modal-content">
+    <div class="container">
+      <button id='close' value='x' class="button display-topright">x</button>
+      <ul id='brewery-info'>
+      </ul>
+    </div>
+  </div>
+</div>
    <ul id="results-list">
    </ul>
  </section>
@@ -175,17 +207,6 @@ const styleOptionElements = data.data.map(style => {
 console.log(styleOptionElements.join(""))
 $('select').html(styleOptionElements.join(""))
 }
-
-
-function handleNextButton(){
- 
-}
- 
- 
-function handlePreviousButton(){
- 
-}
- 
 
  
 function bindEvents(){
