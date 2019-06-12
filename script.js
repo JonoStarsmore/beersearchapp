@@ -99,7 +99,7 @@ function displayBreweryInfo(responseJson){
   for(let i = 0; i < responseJson.data.length; i++){
     $('#brewery-info').append(
       `<li><h3>${responseJson.data[i].name}</h3>
-      <p>Still in business:${responseJson.data[i].isInBusiness}</p></li>`
+      <p>Still in business:  ${responseJson.data[i].isInBusiness}</p></li>`
     )
   }
 }
@@ -172,6 +172,7 @@ function generateResultsHTML(){
  return `<p id="js-error-message" class="error-message"></p>
  <h2 class='search-results'>Search results</h2>
  <section id="results" class="hidden">
+ <button type='button' class='return-To-Search'>Return To Search</button>
    <div id="modal" class="modal">
   <div class="modal-content">
     <div class="container">
@@ -183,8 +184,7 @@ function generateResultsHTML(){
 </div>
    <ul id="results-list">
    </ul>
- </section>
- <button type='button' class='return-To-Search'>Return To Search</button>`
+ </section>`
 }
 
 function renderResultsHTML(){
