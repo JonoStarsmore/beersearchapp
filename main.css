@@ -146,6 +146,11 @@ color: white;
     font-size: 1.4em;
 }
 
+.explained{
+    text-align: center;
+    line-height: 35px;
+}
+
 
 @media only screen and (max-width: 500px){
 #beer-options{
@@ -165,6 +170,26 @@ color: white;
         height: 45px;
         font-size: 18px;
     }
+
+    .extra{
+        font-size: 1em;
+    }
+
+    .app-explanation{
+        font-size: 1em;
+    }
+
+    h1{
+        font-size: 1.2em;
+    }
+
+    h2{
+        font-size: 1.2em;
+    }
+
+    
+
+
 
     
 
