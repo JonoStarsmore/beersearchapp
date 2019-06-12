@@ -1,7 +1,7 @@
 body{
 width:100vw;
 height: 100vh;
-background-image: url(../Images/BeerStockPhoto1.jpg);
+background-image: url(./Images/BeerStockPhoto1.jpg);
 background-size: cover;
 background-attachment: fixed;
 background-position: center;
