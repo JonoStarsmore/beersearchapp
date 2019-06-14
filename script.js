@@ -32,9 +32,10 @@ function handleAgeVerifyYes(){
          <input type="submit" class="submit-button" value="Cheers!">
      </form>`
 }
- 
- //extra Key=40aeb398c0b04b9c9774388e99c14b22
- const apiKey='ea7ce7f27274c0049b58389ab2dfc959'
+ //Secondary key
+ const apiKey='40aeb398c0b04b9c9774388e99c14b22'
+ //First key
+ //const apiKey='ea7ce7f27274c0049b58389ab2dfc959'
  const searchUrl='https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/beers/?';
  const stylesURL = 'https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/styles/?key='+apiKey;
  //const breweryURL = `https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/beer/${beerID}/breweries/?key=ea7ce7f27274c0049b58389ab2dfc959`
@@ -51,9 +52,9 @@ function displayResults(responseJson){
      $('#results-list').append(
        `<li><h3>${responseJson.data[i].name}</h3>
        <button type='button' value='${responseJson.data[i].id}' class='find-brewery'>Find Brewery</button>
-       <p>ABV: ${responseJson.data[i].abv}</p>
-       <p>IBU: ${responseJson.data[i].ibu}</p>
-       <p>${responseJson.data[i].description}</p>`
+       <p>ABV: ${responseJson.data[i].abv || 'N/A'}</p>
+       <p>IBU: ${responseJson.data[i].ibu || 'N/A'}</p>
+       <p>${responseJson.data[i].description || 'N/A'}</p>`
      )
    }
 }
@@ -106,6 +107,7 @@ function displayBreweryInfo(responseJson){
 
 function handleModalClose(){
   $('#modal').on('click','#close', function(e){
+    $('.brewery-info').empty();
     $('#modal').css('display','none');
   })
 }
@@ -113,17 +115,30 @@ function handleModalClose(){
 function getBrewery(){
   $('#results').on('click', '.find-brewery', function(){
     const beerID = $(this).val();
-    const breweryURL = `https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/beer/${beerID}/breweries/?key=ea7ce7f27274c0049b58389ab2dfc959`
+    const breweryURL = `https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/beer/${beerID}/breweries/?key=`+apiKey;
     $('#modal').css('display', 'block')
+    displayLoad();
   
     fetch(breweryURL)
   .then(res => res.json())
   .then(data => {
     console.log(data)
+    closeLoad();
     displayBreweryInfo(data)
   })
   handleModalClose()
 })
+}
+
+function loadHTML(){
+  return `<div class="loader"></div>`
+}
+
+function displayLoad(){
+  $('#modal').append(loadHTML())
+}
+function closeLoad(){
+  $('.loader').css('display', 'none')
 }
 
 function getStylesList() {
