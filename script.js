@@ -109,7 +109,7 @@ function handleModalClose(){
   $('#modal').on('click','#close', function(e){
     $('#modal').css('display','none');
   })
-}
+} 
 
 function getBrewery(){
   $('#results').on('click', '.find-brewery', function(){
