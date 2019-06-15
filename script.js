@@ -1,8 +1,6 @@
 function handleAgeVerifyYes(){
   $('.landing-page').on('click', '.age-verify-yes', function(e){
-    //$('.landing-page').html(renderSearchHTML())
     getStylesList();
-    //watchForm();
   })
 }
  
@@ -32,13 +30,11 @@ function handleAgeVerifyYes(){
          <input type="submit" class="submit-button" value="Cheers!">
      </form>`
 }
- //Secondary key
- const apiKey='40aeb398c0b04b9c9774388e99c14b22'
- //First key
- //const apiKey='ea7ce7f27274c0049b58389ab2dfc959'
+
+ 
+ const apiKey='ea7ce7f27274c0049b58389ab2dfc959'
  const searchUrl='https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/beers/?';
  const stylesURL = 'https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/styles/?key='+apiKey;
- //const breweryURL = `https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/beer/${beerID}/breweries/?key=ea7ce7f27274c0049b58389ab2dfc959`
 
 function formatQueryParameters(params){
      const queryItems = Object.keys(params)
@@ -66,10 +62,6 @@ function getBeerList(styleId){
    const params = {
      key: apiKey,
      styleId: styleId,
-     //withDescriptions:'Y',
-     //abv: "+"+abv,
-     //ibu: "+"+ibu,
-     //styleId: styleId,
    }
  
  const queryString = formatQueryParameters(params);
@@ -152,25 +144,13 @@ fetch(stylesURL)
   .catch(err => console.log(err))
 }
 
-/*
-function getSliderData(form, type) {
-  const range = $(form).find(`#${type}-slider`).val();
-  console.log(range);
-  return range;
-}
-*/
+
 
 
 function watchForm(){
 $('form').on('submit', function(event){
   event.preventDefault();
   const styleId = $('select').find(':selected').attr('id')
-  //const maxResults = $('#js-Max-results').val();
-  //const ABV = getSliderData(this, 'ABV') || 0;
-  //const IBU = getSliderData(this, 'IBU') || 0;
-  //const toggleABV= $('#toggle-ABV').is(':checked')
-  //const toggleIBU=$('#toggle-IBU').is(':checked')
-  //console.log(toggleABV, toggleIBU, ABV, IBU)
   getBeerList(styleId);
   renderResultsHTML();
 })
