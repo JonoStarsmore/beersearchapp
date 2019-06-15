@@ -107,13 +107,13 @@ function displayBreweryInfo(responseJson){
 
 function handleModalClose(){
   $('#modal').on('click','#close', function(e){
-    $('.brewery-info').empty();
     $('#modal').css('display','none');
   })
 }
 
 function getBrewery(){
   $('#results').on('click', '.find-brewery', function(){
+    $('#brewery-info').empty();
     const beerID = $(this).val();
     const breweryURL = `https://cors-anywhere.herokuapp.com/https://sandbox-api.brewerydb.com/v2/beer/${beerID}/breweries/?key=`+apiKey;
     $('#modal').css('display', 'block')
